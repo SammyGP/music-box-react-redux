@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="./style/main.css">
+	<title>Music Box</title>
+</head>
+<body>
+
+	<h1>Home</h1>
+	<div class="track-popup hidden ">
+		<form action="/convert" method="POST">
+			<h2>Tracklist</h2>
+			<input type="submit"><p id="submit">Submit this playlist</p>
+			<span id="close-button">X</span>
+			<ul id="popup-list"></ul>
+		</form>
+	</div>
+	<div class="header list-display">
+		<% newReleases.forEach(function(album){ %>
+			<div class="song-box">
+				<img src="<%= album.images[1].url %>" />
+				<h3 class="artist"><%= album.artists[0].name %></h3>
+				<p class="song"><%= album.name %></p>
+			</div>
+		<% }) %>
+	</div>
+
+	<div class="form">
+		<h2>Song to search for</h2>	
+		<div class="submit-playlist list-display">
+		</div>
+	</div>
+	<div id="js-playlistDisplay"></div>
+	<div class="user-playlists">
+		<button id="get-playlists">Show my playlists</button>
+	</div>
+
+	<div id="app"></div>
+	<div id="player"></div>
+
+
+	<script src="https://unpkg.com/react@16.0.0/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16.0.0/umd/react-dom.development.js"></script>
+	<script type="text/javascript" src="./script/js/scripts.bundle.js"></script>
+</body>
+</html>
