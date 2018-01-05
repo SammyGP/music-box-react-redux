@@ -80,6 +80,10 @@ var _VideoComponents = __webpack_require__(2);
 
 var _VideoComponents2 = _interopRequireDefault(_VideoComponents);
 
+var _Auth = __webpack_require__(3);
+
+var _Auth2 = _interopRequireDefault(_Auth);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -98,31 +102,39 @@ var Layout = function (_React$Component) {
 
         _this.state = {
             playlists: "",
-            youtubeData: ""
+            youtubeData: "",
+            tokens: ""
         };
 
-        _this.componentWillMount = _this.componentWillMount.bind(_this);
+        //this.componentWillMount = this.componentWillMount.bind(this);
         _this.handleListSubmit = _this.handleListSubmit.bind(_this);
+        _this.handleAuth = _this.handleAuth.bind(_this);
         return _this;
     }
 
     _createClass(Layout, [{
-        key: "componentWillMount",
-        value: function componentWillMount() {
+        key: "componentDidUpdate",
+        value: function componentDidUpdate() {
             var _this2 = this;
 
-            fetch("http://localhost:3000/user/playlist").then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                _this2.setState({ playlists: data.items });
-                console.log(_this2);
-            });
+            console.log(this.state);
+            if (!this.state.playlists && this.state.tokens) {
+                fetch("http://localhost:3000/user/playlist/" + this.state.tokens.access_token).then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    _this2.setState({ playlists: data.items });
+                });
+            }
         }
     }, {
         key: "handleListSubmit",
         value: function handleListSubmit(e) {
-            console.log(this);
             this.setState({ youtubeData: e });
+        }
+    }, {
+        key: "handleAuth",
+        value: function handleAuth(e) {
+            this.setState({ tokens: e.tokens });
         }
     }, {
         key: "render",
@@ -130,6 +142,7 @@ var Layout = function (_React$Component) {
             var _this3 = this;
 
             console.log("state change");
+            console.log(this);
 
             if (this.state.playlists && !this.state.youtubeData) {
 
@@ -137,7 +150,11 @@ var Layout = function (_React$Component) {
                 var data = this.state.playlists;
 
                 data.map(function (item) {
-                    return cells.push(React.createElement(_SongComponents2.default, { item: item, key: item.id, onListSubmit: _this3.handleListSubmit }));
+                    return cells.push(React.createElement(_SongComponents2.default, {
+                        item: item, key: item.id,
+                        onListSubmit: _this3.handleListSubmit,
+                        tokens: _this3.state.tokens
+                    }));
                 });
 
                 return React.createElement(
@@ -153,6 +170,7 @@ var Layout = function (_React$Component) {
                 return React.createElement(
                     "div",
                     null,
+                    React.createElement(_Auth2.default, { setTokens: this.handleAuth }),
                     React.createElement(
                         "h1",
                         null,
@@ -244,7 +262,7 @@ var Tracklist = function (_React$Component2) {
             var _this3 = this;
 
             console.log(this);
-            fetch("http://localhost:3000/playlist/" + this.props.user + "/" + this.props.id).then(function (response) {
+            fetch("http://localhost:3000/playlist/" + this.props.user + "/" + this.props.id + "/" + this.props.tokens.access_token).then(function (response) {
                 return response.json();
             }).then(function (data) {
                 return _this3.setState({ tracks: data.tracks.items });
@@ -309,7 +327,7 @@ var SongComponents = function (_React$Component3) {
 
             console.log("submit button clicked");
             console.log(this);
-            fetch("http://localhost:3000/convert", {
+            fetch("http://localhost:3000/convert/" + this.props.tokens.access_token, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -332,7 +350,7 @@ var SongComponents = function (_React$Component3) {
             var imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
 
             if (viewButton) {
-                return React.createElement(Tracklist, { id: list.id, user: list.owner.id });
+                return React.createElement(Tracklist, { id: list.id, user: list.owner.id, tokens: this.props.tokens });
             } else {
                 return React.createElement(
                     "div",
@@ -758,6 +776,87 @@ var VideoComponent = function (_React$Component5) {
 }(React.Component);
 
 exports.default = VideoComponent;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Auth = function (_React$Component) {
+    _inherits(Auth, _React$Component);
+
+    function Auth(props) {
+        _classCallCheck(this, Auth);
+
+        var _this = _possibleConstructorReturn(this, (Auth.__proto__ || Object.getPrototypeOf(Auth)).call(this, props));
+
+        _this.state = {
+            redirectUrl: ""
+        };
+        return _this;
+    }
+
+    _createClass(Auth, [{
+        key: "componentWillMount",
+        value: function componentWillMount() {
+            var _this2 = this;
+
+            fetch("http://localhost:3000/auth", {
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                return _this2.setState({ redirectUrl: data.url });
+            });
+        }
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            var _this3 = this;
+
+            if (!this.props.token) {
+                fetch("http://localhost:3000/api/tokens").then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    return _this3.props.setTokens(data);
+                });
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "a",
+                    { href: this.state.redirectUrl },
+                    "Auth here "
+                )
+            );
+        }
+    }]);
+
+    return Auth;
+}(React.Component);
+
+exports.default = Auth;
 
 /***/ })
 /******/ ]);

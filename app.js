@@ -6,8 +6,8 @@ request			= require("request"),
 auth 			= require("./auth"),
 authRouter		= auth.router,
 rp 				= require("request-promise"),
-cookieSession	= require("cookie-session")
-
+cookieSession	= require("cookie-session"),
+cors			= require("cors"),
 // not vialbe for release to have tokens like this
 // look inte pushing token to front end?
 tokens			= auth.tokens;
@@ -18,8 +18,10 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", function(req, res){
+	/*
 	console.log(tokens.access_token);
 	if(tokens.access_token !== 0) {
 
@@ -63,20 +65,22 @@ app.get("/", function(req, res){
 				})
 				*/
 /****************************************************************************************************/
+/*
 			}
 		})
 	} else {
 		res.render("auth");
-	}
+	}*/
+	res.render("index");
 });
 
 // gets all the tracks from the selected playlist and sends them to the frontend with a fetch request
-app.get("/playlist/:user/:id", function(req, res){
+app.get("/playlist/:user/:id/:token", function(req, res){
 	console.log("get track route");
 	var userTracks = {
 		url: `https://api.spotify.com/v1/users/${req.params.user}/playlists/${req.params.id}`,
 		headers: {
-			"Authorization": "Bearer " + tokens.access_token,
+			"Authorization": "Bearer " + req.params.token,
 			"Accept": "application/json"
 		}
 	}
@@ -94,16 +98,17 @@ app.get("/playlist/:user/:id", function(req, res){
 });
 
 // JSON of user playlists track
-app.get("/user/playlist", function(req, res){
+app.get("/user/playlist/:token", function(req, res){
 	var userPlaylist = {
 		url: "https://api.spotify.com/v1/me/playlists?",
 		headers: {
-			"Authorization": "Bearer " + tokens.access_token,
+			"Authorization": "Bearer " + req.params.token,
 			"Accept": "application/json"
 		}
 	}
 	request(userPlaylist, function(err, response, body){
 		var data = JSON.parse(body);
+		console.log(data);
 		res.send(data);
 	})
 })
@@ -112,7 +117,7 @@ app.get("/convert", function(req, res){
 	res.send("convert!!!");
 })
 // spotify playlist submission
-app.post("/convert", function(req, res){
+app.post("/convert/:token", function(req, res){
 
 	// posts the search_query object containing a string for each artist and song
 
@@ -131,7 +136,7 @@ app.post("/convert", function(req, res){
 	rp({
 		url: req.body.playlist_url, 
 		headers: {
-		"Authorization": "Bearer " + tokens.access_token,
+		"Authorization": "Bearer " + req.params.token,
 		"Accept": "application/json"
 		}		
 	})
@@ -314,7 +319,8 @@ app.get("/data", function(req, res){
 // authentication 
 // if user is not authenticated (ie tokens.access_token is ==== 0) user from index will be redirected to /auth
 app.get("/auth", authRouter);
-app.get("/callback", authRouter)
+app.get("/callback", authRouter);
+app.get("/api/tokens", authRouter);
 
 app.listen(3000, function(){
 	console.log("Server is up");

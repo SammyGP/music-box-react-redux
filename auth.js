@@ -9,8 +9,8 @@ var request = require("request");
 //app.set("view engine", "ejs");
 //app.use(express.static("public"));
 var tokens = {
-	access_token: 0,
-	refresh_token: 0
+	access_token: false,
+	refresh_token: false
 };
 
 router.get("/auth", function(req, res){
@@ -21,7 +21,9 @@ router.get("/auth", function(req, res){
 		redirect_uri: "http://localhost:3000/callback",
 		show_dialog: true
 	})
-	res.redirect("https://accounts.spotify.com/authorize?" + authUrl)
+	console.log("works?")
+	res.json({url: "https://accounts.spotify.com/authorize?" + authUrl})
+	//res.redirect("https://accounts.spotify.com/authorize?" + authUrl)
 })
 
 router.get("/callback", function(req, res){
@@ -38,6 +40,8 @@ router.get("/callback", function(req, res){
 			redirect_uri: "http://localhost:3000/callback"
 		},
 		headers: {
+			"Access-Control-Allow-Origin": "*",
+			"Accept": "application/json",
 			"authorization": "Basic " + (new Buffer(client_id + ':' + client_secret).toString('base64'))
 		},
 		json: true
@@ -50,10 +54,23 @@ router.get("/callback", function(req, res){
 		} else {
 			tokens.access_token = body.access_token;
 			tokens.refresh_token = body.refresh_token;
+			
+			console.log("auth done")
+			//res.json({auth: "yes", token: tokens})
+
 			res.redirect("/");
 		}
 	});
 })
+
+router.get("/api/tokens", function(req, res){
+	if(tokens.access_token) {
+		res.json({tokens});
+	} else {
+		res.json({tokens: false})
+	}
+	
+});
 
 module.exports = {
 	router: router,

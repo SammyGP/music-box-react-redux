@@ -1,5 +1,6 @@
 import SongComponents from "./components/SongComponents.js";
 import VideoComponents from "./components/VideoComponents.js";
+import Auth from "./components/Auth.js";
 class Layout extends React.Component {
     constructor(props) {
         super(props)
@@ -7,29 +8,36 @@ class Layout extends React.Component {
         this.state = {
             playlists: "",
             youtubeData: "",
+            tokens: ""
         };
 
-        this.componentWillMount = this.componentWillMount.bind(this);
+        //this.componentWillMount = this.componentWillMount.bind(this);
         this.handleListSubmit = this.handleListSubmit.bind(this);
+        this.handleAuth = this.handleAuth.bind(this);
     }
 
-    componentWillMount() {
-        fetch(`http://localhost:3000/user/playlist`)
-        .then((response) => { return response.json() })
-        .then((data) => { 
-            this.setState({playlists: data.items})
-            console.log(this);
-        })
+    componentDidUpdate() {
+        console.log(this.state)
+        if(!this.state.playlists && this.state.tokens) {
+            fetch(`http://localhost:3000/user/playlist/${this.state.tokens.access_token}`)
+            .then((response) => { return response.json() })
+            .then((data) => { 
+                this.setState({playlists: data.items})
+            })
+        }  
     }
 
     handleListSubmit(e) {
-        console.log(this)
         this.setState({youtubeData: e})
+    }
+    handleAuth(e) {
+        this.setState({tokens: e.tokens});
     }
 
     render() {
 
         console.log("state change")
+        console.log(this);
 
         if(this.state.playlists && !this.state.youtubeData) {
 
@@ -38,7 +46,11 @@ class Layout extends React.Component {
             
             data.map((item) => {
                 return (cells.push(
-                    <SongComponents item={item} key={item.id} onListSubmit={this.handleListSubmit} />
+                    <SongComponents 
+                        item={item} key={item.id} 
+                        onListSubmit={this.handleListSubmit}
+                        tokens={this.state.tokens} 
+                    />
                 ));
             });
 
@@ -56,6 +68,7 @@ class Layout extends React.Component {
             // returns loading screen until the results from the fetch are resolved
             return(
                 <div>
+                    <Auth setTokens={this.handleAuth} />
                     <h1>Loading</h1>
                 </div>
             );

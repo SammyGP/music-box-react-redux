@@ -24,8 +24,8 @@ class Tracklist extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this);
-        fetch(`http://localhost:3000/playlist/${this.props.user}/${this.props.id}`)
+        console.log(this)
+        fetch(`http://localhost:3000/playlist/${this.props.user}/${this.props.id}/${this.props.tokens.access_token}`)
         .then((response) => { return response.json() })
         .then((data) => { return this.setState({tracks: data.tracks.items}) })
     }
@@ -74,7 +74,7 @@ class SongComponents extends React.Component {
     handleSubmit(e) {
         console.log("submit button clicked");
         console.log(this);
-        fetch(`http://localhost:3000/convert`,{
+        fetch(`http://localhost:3000/convert/${this.props.tokens.access_token}`,{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -96,7 +96,7 @@ class SongComponents extends React.Component {
         
         if(viewButton) {
             return(
-                <Tracklist id={list.id} user={list.owner.id} />
+                <Tracklist id={list.id} user={list.owner.id} tokens={this.props.tokens} />
             );
         } else {
             return(
