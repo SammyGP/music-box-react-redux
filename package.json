@@ -24,7 +24,11 @@
     "querystring": "^0.2.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
+    "style-loader": "^0.19.1",
     "webpack": "^3.10.0"
   },
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:3000",
+  "devDependencies": {
+    "css-loader": "^0.28.8"
+  }
 }

@@ -1,4 +1,6 @@
 
+
+
 class SecondaryResults extends React.Component {
 
     render() {
@@ -14,7 +16,8 @@ class SecondaryResults extends React.Component {
             border:"1px solid black",
             width:"100%",
             height:"90px",
-            margin:"10px",
+            margin:"5px",
+            backgroundColor:"#cc181e"
         }
         const imgStyle = {
             display: "inline-block",
@@ -27,6 +30,7 @@ class SecondaryResults extends React.Component {
         secondaryResults.map((item) => { 
             return display.push(
                 <li style={elStyle} key={item.etag} >
+                    <button style={{float:"right", height:"100%", backgroundColor:"#cc181e"}}>Set</button>
                     <img style={imgStyle} src={item.snippet.thumbnails.default.url} alt={item.snippet.title}/>
                     <p>{item.snippet.title}</p>
                     <p>{item.snippet.channelTitle}</p>
@@ -70,15 +74,6 @@ class VideoResultConfig extends React.Component {
 
     render() {
 
-        const STYLE = {
-            width:"50%",
-            height: "98px",
-            borderBottom:"1px solid black",
-            borderRight: "1px solid black",
-            padding:"4px",
-            marginTop:"4px",
-            verticalAlign:"center"
-        }
         const imgStyle = {
             display: "inline-block",
             float:"left"
@@ -93,7 +88,7 @@ class VideoResultConfig extends React.Component {
 
         return(
             <div>
-                <div style={STYLE} >
+                <div className="videoList" >
                     <img style={imgStyle} src={videoItem.items[0].snippet.thumbnails.default.url} alt={videoItem.items[0].snippet.title}/>
                     <p style={elStyle} >{videoItem.items[0].snippet.title}</p>
                     <button style={{float:"right"}} onClick={this.handleShow} >SHOW</button>
@@ -209,8 +204,14 @@ class VideoComponent extends React.Component {
             videoIds: []
         };
 
-        this.props.list.map((item) => { return this.state.videoIds.push(item.items[0].id.videoId) })
-
+        // gets the id of the first video of each object and sets it as the default video to watch
+        this.props.list.map((item) => { 
+            if(item.items[0]) {
+                return this.state.videoIds.push(item.items[0].id.videoId) 
+            } else {
+                return this.state.videoIds.push(null)
+            }
+        })
         this.handleShowSecondary = this.handleShowSecondary.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -228,11 +229,18 @@ class VideoComponent extends React.Component {
         console.log(this);
     }
 
+    handleSongChange(e) {
+        // TODO
+        // pass this down to the secondary results component
+        // filter the videoids for the song mathcing and replace it with the new selected song
+        //
+        // click set song -> filter function finds current song id -> replaces with set song id
+    }
+
 
     render() {
         const videoPlaybackButton = this.state.videoPlaybackButton;
         console.log("Render");
-        console.log(this);
         if(videoPlaybackButton) {
             return(
                 <TestYT playlist={this.state.videoIds} />
@@ -243,14 +251,16 @@ class VideoComponent extends React.Component {
             let list = [];
             let ID = [];
             videoItem.map((item) => {
-                ID.push(item.items[0].id.videoId);
-                return (list.push(
-                    <VideoResultConfig results={item} key={item.etag} onShow={this.handleShowSecondary} />
-                )); 
+                if(item.items[0]) {
+                    ID.push(item.items[0].id.videoId);
+                    return (list.push(
+                        <VideoResultConfig results={item} key={item.etag} onShow={this.handleShowSecondary} />
+                    )); 
+                }
             })
             return(
-                <div style={{margin:"0", textAlign:"center", position:"relative"}} >
-                    <button onClick={this.handleSubmit} >Go to Playlist</button>
+                <div style={{marginTop:"-30px", textAlign:"center", position:"relative"}} >
+                    <button onClick={this.handleSubmit} id="playlistButton">Go to Playlist</button>
                     {list}
                     <SecondaryResults secondaryResults={this.state.secondaryResults} />
                 </div>

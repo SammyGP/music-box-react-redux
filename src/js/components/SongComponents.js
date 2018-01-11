@@ -1,10 +1,12 @@
+//import "./SongComponents.css";
+
 class TrackItem extends React.Component {
     render() {
 
         let artists = this.props.track.track.artists.map((artist) => {return artist.name + " "})
 
         return(
-            <div style={{border:"1px solid black", padding:"5px"}} >
+            <div>
                 <li>{this.props.track.track.name} - {artists} </li>
             </div>
         );
@@ -34,8 +36,8 @@ class Tracklist extends React.Component {
 
         const STYLE = {
             overflow:"scroll",
-            fontSize: "0.8em"
-
+            fontSize: "0.8em",
+            height:"300px"
         }
 
         let tracks = [];
@@ -43,9 +45,8 @@ class Tracklist extends React.Component {
         data.map((track) => {return tracks.push(
             <TrackItem track={track} key={track.track.id} />
         )});
-        
         return(
-            <div style={STYLE} >
+            <div  className="tracklist">
                 {tracks}
             </div>
         );
@@ -66,9 +67,12 @@ class SongComponents extends React.Component {
     }
 
     handleClickView(e) {
-        e.preventDefault();
         console.log("view Button Clicked")
-        this.setState({viewButton:true})
+        if(this.state.viewButton) {
+            this.setState({viewButton:false})
+        } else {
+            this.setState({viewButton:true})
+        }
     }
 
     handleSubmit(e) {
@@ -96,12 +100,16 @@ class SongComponents extends React.Component {
         
         if(viewButton) {
             return(
-                <Tracklist id={list.id} user={list.owner.id} tokens={this.props.tokens} />
+                <div className="songList" >
+                    <button onClick={this.handleClickView} >View</button>
+                    <button onClick={this.handleSubmit} >Submit</button>
+                    <Tracklist id={list.id} user={list.owner.id} tokens={this.props.tokens} />
+                </div>
             );
         } else {
             return(
                 
-                <div className="listItem">
+                <div className="songBox box-shadow">
                     <img 
                         src={imgItem} 
                         alt={list.name} 

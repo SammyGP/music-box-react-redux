@@ -1,6 +1,36 @@
 import SongComponents from "./components/SongComponents.js";
 import VideoComponents from "./components/VideoComponents.js";
 import Auth from "./components/Auth.js";
+
+
+class Nav extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            activeColor: "#930000",
+            defaultColor: "#000000",
+
+        }
+    }
+
+    render() {
+        const color = this.props.colorSchema;
+        return(
+            <nav className="nav" style={{boxShadow:`0px 3px 3px ${color}`}} >
+                <h1><a href="/">Music Box</a></h1>
+                <div>
+                    <h3>Songs</h3>
+                    <h3>></h3>
+                    <h3>Results</h3>
+                    <h3>></h3>
+                    <h3>Videos</h3>
+                </div>
+            </nav>
+        );
+    }
+}
+
 class Layout extends React.Component {
     constructor(props) {
         super(props)
@@ -55,19 +85,26 @@ class Layout extends React.Component {
             });
 
             return(
-                <div style={{display: "grid", gridTemplateColumns: "25% 25% 25% 25%"}} >
-                    {cells}
+                <div>
+                    <Nav view="song" colorSchema="#2eb039" />
+                    <div style={{display: "grid", gridTemplateColumns: "25% 25% 25% 25%"}} >
+                        {cells}
+                    </div>
                 </div>
             );
         } else if (this.state.youtubeData && this.state.playlists) {
             return (
-                <VideoComponents list={this.state.youtubeData} />
+                <div>
+                    <Nav view="video" colorSchema="#cc181e"/>
+                    <VideoComponents list={this.state.youtubeData} />
+                </div>
             );
         } else {
 
             // returns loading screen until the results from the fetch are resolved
             return(
                 <div>
+                    <Nav view="auth" colorSchema="#ffffff" />
                     <Auth setTokens={this.handleAuth} />
                     <h1>Loading</h1>
                 </div>

@@ -28,7 +28,7 @@ class Auth extends React.Component {
 
     render() {
         return(
-            <div><a href={this.state.redirectUrl}>Auth here </a></div>
+            <div className="auth" ><a href={this.state.redirectUrl}><button>Auth here</button></a></div>
         );
     }
 }

@@ -92,37 +92,105 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Layout = function (_React$Component) {
-    _inherits(Layout, _React$Component);
+var Nav = function (_React$Component) {
+    _inherits(Nav, _React$Component);
+
+    function Nav(props) {
+        _classCallCheck(this, Nav);
+
+        var _this = _possibleConstructorReturn(this, (Nav.__proto__ || Object.getPrototypeOf(Nav)).call(this, props));
+
+        _this.state = {
+            activeColor: "#930000",
+            defaultColor: "#000000"
+
+        };
+        return _this;
+    }
+
+    _createClass(Nav, [{
+        key: "render",
+        value: function render() {
+            var color = this.props.colorSchema;
+            return React.createElement(
+                "nav",
+                { className: "nav", style: { boxShadow: "0px 3px 3px " + color } },
+                React.createElement(
+                    "h1",
+                    null,
+                    React.createElement(
+                        "a",
+                        { href: "/" },
+                        "Music Box"
+                    )
+                ),
+                React.createElement(
+                    "div",
+                    null,
+                    React.createElement(
+                        "h3",
+                        null,
+                        "Songs"
+                    ),
+                    React.createElement(
+                        "h3",
+                        null,
+                        ">"
+                    ),
+                    React.createElement(
+                        "h3",
+                        null,
+                        "Results"
+                    ),
+                    React.createElement(
+                        "h3",
+                        null,
+                        ">"
+                    ),
+                    React.createElement(
+                        "h3",
+                        null,
+                        "Videos"
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Nav;
+}(React.Component);
+
+var Layout = function (_React$Component2) {
+    _inherits(Layout, _React$Component2);
 
     function Layout(props) {
         _classCallCheck(this, Layout);
 
-        var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             playlists: "",
             youtubeData: "",
             tokens: ""
         };
 
         //this.componentWillMount = this.componentWillMount.bind(this);
-        _this.handleListSubmit = _this.handleListSubmit.bind(_this);
-        _this.handleAuth = _this.handleAuth.bind(_this);
-        return _this;
+        _this2.handleListSubmit = _this2.handleListSubmit.bind(_this2);
+        _this2.handleAuth = _this2.handleAuth.bind(_this2);
+        return _this2;
     }
 
     _createClass(Layout, [{
         key: "componentDidUpdate",
         value: function componentDidUpdate() {
-            var _this2 = this;
+            var _this3 = this;
 
             console.log(this.state);
             if (!this.state.playlists && this.state.tokens) {
                 fetch("http://localhost:3000/user/playlist/" + this.state.tokens.access_token).then(function (response) {
                     return response.json();
                 }).then(function (data) {
-                    _this2.setState({ playlists: data.items });
+                    _this3.setState({ playlists: data.items });
                 });
             }
         }
@@ -139,7 +207,7 @@ var Layout = function (_React$Component) {
     }, {
         key: "render",
         value: function render() {
-            var _this3 = this;
+            var _this4 = this;
 
             console.log("state change");
             console.log(this);
@@ -152,24 +220,35 @@ var Layout = function (_React$Component) {
                 data.map(function (item) {
                     return cells.push(React.createElement(_SongComponents2.default, {
                         item: item, key: item.id,
-                        onListSubmit: _this3.handleListSubmit,
-                        tokens: _this3.state.tokens
+                        onListSubmit: _this4.handleListSubmit,
+                        tokens: _this4.state.tokens
                     }));
                 });
 
                 return React.createElement(
                     "div",
-                    { style: { display: "grid", gridTemplateColumns: "25% 25% 25% 25%" } },
-                    cells
+                    null,
+                    React.createElement(Nav, { view: "song", colorSchema: "#2eb039" }),
+                    React.createElement(
+                        "div",
+                        { style: { display: "grid", gridTemplateColumns: "25% 25% 25% 25%" } },
+                        cells
+                    )
                 );
             } else if (this.state.youtubeData && this.state.playlists) {
-                return React.createElement(_VideoComponents2.default, { list: this.state.youtubeData });
+                return React.createElement(
+                    "div",
+                    null,
+                    React.createElement(Nav, { view: "video", colorSchema: "#cc181e" }),
+                    React.createElement(_VideoComponents2.default, { list: this.state.youtubeData })
+                );
             } else {
 
                 // returns loading screen until the results from the fetch are resolved
                 return React.createElement(
                     "div",
                     null,
+                    React.createElement(Nav, { view: "auth", colorSchema: "#ffffff" }),
                     React.createElement(_Auth2.default, { setTokens: this.handleAuth }),
                     React.createElement(
                         "h1",
@@ -205,6 +284,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+//import "./SongComponents.css";
+
 var TrackItem = function (_React$Component) {
     _inherits(TrackItem, _React$Component);
 
@@ -224,7 +305,7 @@ var TrackItem = function (_React$Component) {
 
             return React.createElement(
                 "div",
-                { style: { border: "1px solid black", padding: "5px" } },
+                null,
                 React.createElement(
                     "li",
                     null,
@@ -274,8 +355,8 @@ var Tracklist = function (_React$Component2) {
 
             var STYLE = {
                 overflow: "scroll",
-                fontSize: "0.8em"
-
+                fontSize: "0.8em",
+                height: "300px"
             };
 
             var tracks = [];
@@ -283,10 +364,9 @@ var Tracklist = function (_React$Component2) {
             data.map(function (track) {
                 return tracks.push(React.createElement(TrackItem, { track: track, key: track.track.id }));
             });
-
             return React.createElement(
                 "div",
-                { style: STYLE },
+                { className: "tracklist" },
                 tracks
             );
         }
@@ -316,9 +396,12 @@ var SongComponents = function (_React$Component3) {
     _createClass(SongComponents, [{
         key: "handleClickView",
         value: function handleClickView(e) {
-            e.preventDefault();
             console.log("view Button Clicked");
-            this.setState({ viewButton: true });
+            if (this.state.viewButton) {
+                this.setState({ viewButton: false });
+            } else {
+                this.setState({ viewButton: true });
+            }
         }
     }, {
         key: "handleSubmit",
@@ -350,11 +433,25 @@ var SongComponents = function (_React$Component3) {
             var imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
 
             if (viewButton) {
-                return React.createElement(Tracklist, { id: list.id, user: list.owner.id, tokens: this.props.tokens });
+                return React.createElement(
+                    "div",
+                    { className: "songList" },
+                    React.createElement(
+                        "button",
+                        { onClick: this.handleClickView },
+                        "View"
+                    ),
+                    React.createElement(
+                        "button",
+                        { onClick: this.handleSubmit },
+                        "Submit"
+                    ),
+                    React.createElement(Tracklist, { id: list.id, user: list.owner.id, tokens: this.props.tokens })
+                );
             } else {
                 return React.createElement(
                     "div",
-                    { className: "listItem" },
+                    { className: "songBox box-shadow" },
                     React.createElement("img", {
                         src: imgItem,
                         alt: list.name
@@ -447,7 +544,8 @@ var SecondaryResults = function (_React$Component) {
                 border: "1px solid black",
                 width: "100%",
                 height: "90px",
-                margin: "10px"
+                margin: "5px",
+                backgroundColor: "#cc181e"
             };
             var imgStyle = {
                 display: "inline-block",
@@ -461,6 +559,11 @@ var SecondaryResults = function (_React$Component) {
                 return display.push(React.createElement(
                     "li",
                     { style: elStyle, key: item.etag },
+                    React.createElement(
+                        "button",
+                        { style: { float: "right", height: "100%", backgroundColor: "#cc181e" } },
+                        "Set"
+                    ),
                     React.createElement("img", { style: imgStyle, src: item.snippet.thumbnails.default.url, alt: item.snippet.title }),
                     React.createElement(
                         "p",
@@ -521,15 +624,6 @@ var VideoResultConfig = function (_React$Component2) {
         key: "render",
         value: function render() {
 
-            var STYLE = {
-                width: "50%",
-                height: "98px",
-                borderBottom: "1px solid black",
-                borderRight: "1px solid black",
-                padding: "4px",
-                marginTop: "4px",
-                verticalAlign: "center"
-            };
             var imgStyle = {
                 display: "inline-block",
                 float: "left"
@@ -547,7 +641,7 @@ var VideoResultConfig = function (_React$Component2) {
                 null,
                 React.createElement(
                     "div",
-                    { style: STYLE },
+                    { className: "videoList" },
                     React.createElement("img", { style: imgStyle, src: videoItem.items[0].snippet.thumbnails.default.url, alt: videoItem.items[0].snippet.title }),
                     React.createElement(
                         "p",
@@ -714,10 +808,14 @@ var VideoComponent = function (_React$Component5) {
             videoIds: []
         };
 
+        // gets the id of the first video of each object and sets it as the default video to watch
         _this8.props.list.map(function (item) {
-            return _this8.state.videoIds.push(item.items[0].id.videoId);
+            if (item.items[0]) {
+                return _this8.state.videoIds.push(item.items[0].id.videoId);
+            } else {
+                return _this8.state.videoIds.push(null);
+            }
         });
-
         _this8.handleShowSecondary = _this8.handleShowSecondary.bind(_this8);
         _this8.handleSubmit = _this8.handleSubmit.bind(_this8);
         return _this8;
@@ -739,13 +837,21 @@ var VideoComponent = function (_React$Component5) {
             console.log(this);
         }
     }, {
+        key: "handleSongChange",
+        value: function handleSongChange(e) {
+            // TODO
+            // pass this down to the secondary results component
+            // filter the videoids for the song mathcing and replace it with the new selected song
+            //
+            // click set song -> filter function finds current song id -> replaces with set song id
+        }
+    }, {
         key: "render",
         value: function render() {
             var _this9 = this;
 
             var videoPlaybackButton = this.state.videoPlaybackButton;
             console.log("Render");
-            console.log(this);
             if (videoPlaybackButton) {
                 return React.createElement(TestYT, { playlist: this.state.videoIds });
             } else {
@@ -754,15 +860,17 @@ var VideoComponent = function (_React$Component5) {
                 var list = [];
                 var ID = [];
                 videoItem.map(function (item) {
-                    ID.push(item.items[0].id.videoId);
-                    return list.push(React.createElement(VideoResultConfig, { results: item, key: item.etag, onShow: _this9.handleShowSecondary }));
+                    if (item.items[0]) {
+                        ID.push(item.items[0].id.videoId);
+                        return list.push(React.createElement(VideoResultConfig, { results: item, key: item.etag, onShow: _this9.handleShowSecondary }));
+                    }
                 });
                 return React.createElement(
                     "div",
-                    { style: { margin: "0", textAlign: "center", position: "relative" } },
+                    { style: { marginTop: "-30px", textAlign: "center", position: "relative" } },
                     React.createElement(
                         "button",
-                        { onClick: this.handleSubmit },
+                        { onClick: this.handleSubmit, id: "playlistButton" },
                         "Go to Playlist"
                     ),
                     list,
@@ -843,11 +951,15 @@ var Auth = function (_React$Component) {
         value: function render() {
             return React.createElement(
                 "div",
-                null,
+                { className: "auth" },
                 React.createElement(
                     "a",
                     { href: this.state.redirectUrl },
-                    "Auth here "
+                    React.createElement(
+                        "button",
+                        null,
+                        "Auth here"
+                    )
                 )
             );
         }

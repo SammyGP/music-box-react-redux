@@ -73,6 +73,5 @@ router.get("/api/tokens", function(req, res){
 });
 
 module.exports = {
-	router: router,
-	tokens: tokens
+	router: router
 };

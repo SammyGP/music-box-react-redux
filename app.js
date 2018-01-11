@@ -7,10 +7,12 @@ auth 			= require("./auth"),
 authRouter		= auth.router,
 rp 				= require("request-promise"),
 cookieSession	= require("cookie-session"),
-cors			= require("cors"),
+cors			= require("cors");
 // not vialbe for release to have tokens like this
 // look inte pushing token to front end?
-tokens			= auth.tokens;
+
+// no longer needed since i handle the tokens in the front end
+//tokens			= auth.tokens;
 
 
 
@@ -21,56 +23,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", function(req, res){
-	/*
-	console.log(tokens.access_token);
-	if(tokens.access_token !== 0) {
-
-		// get the new releases for the index header
-		// TODO get new release playlist instead of new releas tracks
-		var newReleases = {
-			url: "https://api.spotify.com/v1/browse/new-releases?limit=10",
-			headers: {
-				"Authorization": "Bearer " + tokens.access_token,
-				"Accept": "application/json"
-			}
-		}
-
-		request(newReleases, function(err, response, body){
-			if(err){
-				console.log(err)
-			} else {
-				//res.send(body);
-				var results = JSON.parse(body);
-				res.render("index", {newReleases: results.albums.items});
-
-
-/*****************************************************************************************************/
-				// old user playlist request
-				// when done request the user playlist
-				/*
-				var userPlaylist = {
-					url: "https://api.spotify.com/v1/me/playlists?",
-					headers: {
-						"Authorization": "Bearer " + tokens.access_token,
-						"Accept": "application/json"
-					}
-				}
-				request(userPlaylist, function(e, r, b){
-					if(e) {
-						console.log(e);
-					} else {
-						var playlistResult = JSON.parse(b);
-						res.render("index", {newReleases: results.albums.items, userPlaylist:playlistResult.items});
-					}
-				})
-				*/
-/****************************************************************************************************/
-/*
-			}
-		})
-	} else {
-		res.render("auth");
-	}*/
 	res.render("index");
 });
 
@@ -108,7 +60,6 @@ app.get("/user/playlist/:token", function(req, res){
 	}
 	request(userPlaylist, function(err, response, body){
 		var data = JSON.parse(body);
-		console.log(data);
 		res.send(data);
 	})
 })
@@ -128,7 +79,6 @@ app.post("/convert/:token", function(req, res){
 	//
 
 	var spotifyList = false;
-	console.log(req.body);
 
 	/*****  *******/
 	// TEST
@@ -150,133 +100,40 @@ app.post("/convert/:token", function(req, res){
 		return searchData })
 	.then((response) => { 
 		let data = [];
-		let counter = 1;
+		let counter = 0;
 			response.map((track) => {
-				rp(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${track}`)
+				rp({
+					url:`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${track}`,
+					headers: {
+						"Accept": "application/json"
+					}
+				})
 				.then((response) => { return JSON.parse(response) })
 				.then((response) => { return data.push(response) })
 				.then(() => { 
+					counter++;
 					console.log(counter);
 					console.log(response.length);
-					if(counter === response.length) {
+					if(counter === (response.length)) {
 						console.log("done handling data");
 						counter = 1;
 						return res.send(data);
 					}
-					counter++ })
+				})
+				.catch((error) => { 
+					counter++;
+					console.log("Following track not added: " + track);
+					return console.log("track is this long: " + `${track}`) 
+				})
 			})
+	})
+	.catch((error) => { 
+		console.log("token expired?"); 
+		console.log(error);
 	})
 
 	/******  ******/
 
-
-
-
-	var trackSearchTerms = [];
-	var searchTermsResult = [];
-	/*
-	rp({
-		url: req.body.playlist_url, 
-			headers: {
-			"Authorization": "Bearer " + tokens.access_token,
-			"Accept": "application/json"
-			}
-	}, function(error, response, body) {
-		if(error) {
-			console.log(error);
-		}
-		
-
-		body = JSON.parse(body);
-		var data = body.items;
-		data.forEach(function(track){
-			var artists = track.track.artists.map((artist) => {return " " + artist.name + " "});
-			trackSearchTerms.push(track.track.name + artists);
-		})
-		console.log("works?")
-		res.send(trackSearchTerms);
-	})
-	.then(function(data){
-		trackSearchTerms.map((track) => {
-			rp(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${track}`)
-			.then((data) => { return searchTermsResult.push(data) })
-		})
-	})
-	.then(function(result){
-		console.log(searchTermsResult);
-		console.log("done")
-	})
-*/
-	// DISGREGARD FOR NOW
-	// **************************************************************************
-	if(!spotifyList) {
-		console.log("something went wrong");
-	} else {
-
-		var data = [];
-		var counter = 0;
-		console.log(typeof spotifyList.search_query);
-		console.log(spotifyList.search_query);
-
-		// the for loops request the youtube api every iteration 
-		// when the request is done (it returns a promise) and adds to the counter
-		// when the counter is bigger than the list its renders the page with all the data
-		/*
-			PROBLEM due the async nature of request i cant do a conventional counter due the fact
-			that a normal counter and for loop will count up while the request data is still handled
-			with the .then() i make sure each request is finished before i add to the counter and render the new page
-		*/
-
-		spotifyList.search_query.forEach(function(item){
-			rp(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${item}`, 
-			function(error, response, body){
-				if(response.statusCode === 200) {
-					console.log(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${item}`);
-					var result = JSON.parse(body);
-					result = result.items[0];
-					data.push(result);
-				} else if (response.statusCode === 400) {
-					console.log("Error statuscode 400");
-					var result = item + " Song not found";
-					data.push(result);
-				}
-			}).then(function(){
-				console.log(data.length);
-				console.log(spotifyList.search_query.length);
-				counter++;
-				if(data.length === spotifyList.search_query.length) {
-					console.log("all the data done");
-					//res.send(data);
-					res.render("results", {data: data});
-					counter = 0;
-				}
-			})
-		})
-
-/*
-		for (var i = 0; i < spotifyList.search_query.length; i++) {
-
-			rp(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${spotifyList.search_query[counter]}`, 
-			function(error, response, body){
-				var result = JSON.parse(body);
-				console.log(result);
-				result = result.items[0];
-				data.push(result);
-			}).then(function(){
-				counter++;
-				if(counter === spotifyList.search_query.length) {
-					console.log("all the data done");
-					//res.send(data);
-					res.render("results", {data: data});
-					counter = 0;
-				}
-			}).catch(function(err){
-				console.log("ERROR");
-				console.log(err);
-			})
-		}
-*/
-	}
 });
 
 // search youtube for query endpoint
@@ -324,5 +181,5 @@ app.get("/api/tokens", authRouter);
 
 app.listen(3000, function(){
 	console.log("Server is up");
-	console.log("on port" + process.env.PORT)
+	console.log("on port " + process.env.port)
 });
