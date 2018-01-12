@@ -1,5 +1,15 @@
 //import "./SongComponents.css";
 
+class Loading extends React.Component {
+    render() {
+        return(
+            <div>
+                <h1>Loading</h1>
+            </div>
+        );
+    }
+}
+
 class TrackItem extends React.Component {
     render() {
 
@@ -19,7 +29,8 @@ class Tracklist extends React.Component {
         super(props)
 
         this.state = {
-            tracks: []
+            tracks: [],
+            loading: false
         }
 
         this.componentWillMount = this.componentWillMount.bind(this);
@@ -27,17 +38,19 @@ class Tracklist extends React.Component {
 
     componentWillMount() {
         console.log(this)
+        this.setState({loading: true})
         fetch(`http://localhost:3000/playlist/${this.props.user}/${this.props.id}/${this.props.tokens.access_token}`)
         .then((response) => { return response.json() })
-        .then((data) => { return this.setState({tracks: data.tracks.items}) })
+        .then((data) => { 
+            this.setState({loading: false})
+            return this.setState({tracks: data.tracks.items}) 
+        })
     }
 
     render() {
 
-        const STYLE = {
-            overflow:"scroll",
-            fontSize: "0.8em",
-            height:"300px"
+        if(this.state.loading) {
+            return( <Loading /> );
         }
 
         let tracks = [];
@@ -60,6 +73,7 @@ class SongComponents extends React.Component {
         this.state = {
             viewButton: false,
             submitButton: false,
+            loading: false
         }
 
         this.handleClickView = this.handleClickView.bind(this)
@@ -78,6 +92,8 @@ class SongComponents extends React.Component {
     handleSubmit(e) {
         console.log("submit button clicked");
         console.log(this);
+
+        this.setState({loading: true})
         fetch(`http://localhost:3000/convert/${this.props.tokens.access_token}`,{
             headers: {
                 'Accept': 'application/json',
@@ -89,6 +105,7 @@ class SongComponents extends React.Component {
         .then((response) => { return response.json() })
         .then((response) => { 
             console.log(response)
+            this.setState({loading: false})
             return this.props.onListSubmit(response) })
     }
 
@@ -97,6 +114,10 @@ class SongComponents extends React.Component {
         const list = this.props.item;
         // checks if img of chosen size exist // 2nd part checks for bigger img if first not found
         let imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
+
+        if(this.state.loading) {
+            return ( <Loading /> );
+        }
         
         if(viewButton) {
             return(

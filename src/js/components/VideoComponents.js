@@ -262,7 +262,7 @@ class VideoComponent extends React.Component {
                 <div style={{marginTop:"-30px", textAlign:"center", position:"relative"}} >
                     <button onClick={this.handleSubmit} id="playlistButton">Go to Playlist</button>
                     {list}
-                    <SecondaryResults secondaryResults={this.state.secondaryResults} />
+                    {/*<SecondaryResults secondaryResults={this.state.secondaryResults} />*/}
                 </div>
             );
         }

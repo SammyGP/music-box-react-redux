@@ -286,8 +286,35 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 //import "./SongComponents.css";
 
-var TrackItem = function (_React$Component) {
-    _inherits(TrackItem, _React$Component);
+var Loading = function (_React$Component) {
+    _inherits(Loading, _React$Component);
+
+    function Loading() {
+        _classCallCheck(this, Loading);
+
+        return _possibleConstructorReturn(this, (Loading.__proto__ || Object.getPrototypeOf(Loading)).apply(this, arguments));
+    }
+
+    _createClass(Loading, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h1",
+                    null,
+                    "Loading"
+                )
+            );
+        }
+    }]);
+
+    return Loading;
+}(React.Component);
+
+var TrackItem = function (_React$Component2) {
+    _inherits(TrackItem, _React$Component2);
 
     function TrackItem() {
         _classCallCheck(this, TrackItem);
@@ -321,43 +348,44 @@ var TrackItem = function (_React$Component) {
     return TrackItem;
 }(React.Component);
 
-var Tracklist = function (_React$Component2) {
-    _inherits(Tracklist, _React$Component2);
+var Tracklist = function (_React$Component3) {
+    _inherits(Tracklist, _React$Component3);
 
     function Tracklist(props) {
         _classCallCheck(this, Tracklist);
 
-        var _this2 = _possibleConstructorReturn(this, (Tracklist.__proto__ || Object.getPrototypeOf(Tracklist)).call(this, props));
+        var _this3 = _possibleConstructorReturn(this, (Tracklist.__proto__ || Object.getPrototypeOf(Tracklist)).call(this, props));
 
-        _this2.state = {
-            tracks: []
+        _this3.state = {
+            tracks: [],
+            loading: false
         };
 
-        _this2.componentWillMount = _this2.componentWillMount.bind(_this2);
-        return _this2;
+        _this3.componentWillMount = _this3.componentWillMount.bind(_this3);
+        return _this3;
     }
 
     _createClass(Tracklist, [{
         key: "componentWillMount",
         value: function componentWillMount() {
-            var _this3 = this;
+            var _this4 = this;
 
             console.log(this);
+            this.setState({ loading: true });
             fetch("http://localhost:3000/playlist/" + this.props.user + "/" + this.props.id + "/" + this.props.tokens.access_token).then(function (response) {
                 return response.json();
             }).then(function (data) {
-                return _this3.setState({ tracks: data.tracks.items });
+                _this4.setState({ loading: false });
+                return _this4.setState({ tracks: data.tracks.items });
             });
         }
     }, {
         key: "render",
         value: function render() {
 
-            var STYLE = {
-                overflow: "scroll",
-                fontSize: "0.8em",
-                height: "300px"
-            };
+            if (this.state.loading) {
+                return React.createElement(Loading, null);
+            }
 
             var tracks = [];
             var data = this.state.tracks;
@@ -375,22 +403,23 @@ var Tracklist = function (_React$Component2) {
     return Tracklist;
 }(React.Component);
 
-var SongComponents = function (_React$Component3) {
-    _inherits(SongComponents, _React$Component3);
+var SongComponents = function (_React$Component4) {
+    _inherits(SongComponents, _React$Component4);
 
     function SongComponents(props) {
         _classCallCheck(this, SongComponents);
 
-        var _this4 = _possibleConstructorReturn(this, (SongComponents.__proto__ || Object.getPrototypeOf(SongComponents)).call(this, props));
+        var _this5 = _possibleConstructorReturn(this, (SongComponents.__proto__ || Object.getPrototypeOf(SongComponents)).call(this, props));
 
-        _this4.state = {
+        _this5.state = {
             viewButton: false,
-            submitButton: false
+            submitButton: false,
+            loading: false
         };
 
-        _this4.handleClickView = _this4.handleClickView.bind(_this4);
-        _this4.handleSubmit = _this4.handleSubmit.bind(_this4);
-        return _this4;
+        _this5.handleClickView = _this5.handleClickView.bind(_this5);
+        _this5.handleSubmit = _this5.handleSubmit.bind(_this5);
+        return _this5;
     }
 
     _createClass(SongComponents, [{
@@ -406,10 +435,12 @@ var SongComponents = function (_React$Component3) {
     }, {
         key: "handleSubmit",
         value: function handleSubmit(e) {
-            var _this5 = this;
+            var _this6 = this;
 
             console.log("submit button clicked");
             console.log(this);
+
+            this.setState({ loading: true });
             fetch("http://localhost:3000/convert/" + this.props.tokens.access_token, {
                 headers: {
                     'Accept': 'application/json',
@@ -421,7 +452,8 @@ var SongComponents = function (_React$Component3) {
                 return response.json();
             }).then(function (response) {
                 console.log(response);
-                return _this5.props.onListSubmit(response);
+                _this6.setState({ loading: false });
+                return _this6.props.onListSubmit(response);
             });
         }
     }, {
@@ -431,6 +463,10 @@ var SongComponents = function (_React$Component3) {
             var list = this.props.item;
             // checks if img of chosen size exist // 2nd part checks for bigger img if first not found
             var imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
+
+            if (this.state.loading) {
+                return React.createElement(Loading, null);
+            }
 
             if (viewButton) {
                 return React.createElement(
@@ -873,8 +909,7 @@ var VideoComponent = function (_React$Component5) {
                         { onClick: this.handleSubmit, id: "playlistButton" },
                         "Go to Playlist"
                     ),
-                    list,
-                    React.createElement(SecondaryResults, { secondaryResults: this.state.secondaryResults })
+                    list
                 );
             }
         }

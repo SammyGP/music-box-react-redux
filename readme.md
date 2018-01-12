@@ -8,4 +8,7 @@ A full-stack web application that searches for youtube videos of known/chosen sp
 
 -- implement playlists that are longer than 100 songs (max limit per single request from the spotify api)
 
+--implement loading/transitions component/parts for when i fetch or load the api so that the user knows its loading
+
 -- fix the char encoding for the youtube q="song" errors occur with special chars lite chinese/russian see app.js catch error at line 123
+
