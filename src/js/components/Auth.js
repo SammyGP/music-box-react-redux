@@ -9,7 +9,7 @@ class Auth extends React.Component {
     }
     
     componentWillMount() {
-        fetch("http://localhost:3000/auth",{
+        fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/auth",{
             headers: {
                 "Accept": "application/json"
                 }
@@ -20,7 +20,7 @@ class Auth extends React.Component {
     }
     componentDidMount() {
         if(!this.props.token) {
-            fetch("http://localhost:3000/api/tokens")
+            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/api/tokens")
                 .then((response) => { return response.json() })
                 .then((data) => { return this.props.setTokens(data) })
         }
@@ -28,7 +28,7 @@ class Auth extends React.Component {
 
     render() {
         return(
-            <div className="auth" ><a href={this.state.redirectUrl}><button>Auth here</button></a></div>
+            <div className="auth" ><a href={this.state.redirectUrl}><button>Go to Spotify Authentication</button></a></div>
         );
     }
 }

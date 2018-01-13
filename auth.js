@@ -18,7 +18,7 @@ router.get("/auth", function(req, res){
 		client_id: client_id,
 		response_type: "code",
 		scope: "playlist-read-private",
-		redirect_uri: "http://localhost:3000/callback",
+		redirect_uri: "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/callback",
 		show_dialog: true
 	})
 	console.log("works?")
@@ -37,7 +37,7 @@ router.get("/callback", function(req, res){
 		form: {
 			grant_type: "authorization_code",
 			code: req.query.code,
-			redirect_uri: "http://localhost:3000/callback"
+			redirect_uri: "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/callback"
 		},
 		headers: {
 			"Access-Control-Allow-Origin": "*",

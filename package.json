@@ -27,7 +27,7 @@
     "style-loader": "^0.19.1",
     "webpack": "^3.10.0"
   },
-  "proxy": "http://localhost:3000",
+  "proxy": "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/",
   "devDependencies": {
     "css-loader": "^0.28.8"
   }

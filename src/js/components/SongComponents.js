@@ -37,9 +37,8 @@ class Tracklist extends React.Component {
     }
 
     componentWillMount() {
-        console.log(this)
         this.setState({loading: true})
-        fetch(`http://localhost:3000/playlist/${this.props.user}/${this.props.id}/${this.props.tokens.access_token}`)
+        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/${this.props.user}/${this.props.id}/${this.props.tokens.access_token}`)
         .then((response) => { return response.json() })
         .then((data) => { 
             this.setState({loading: false})
@@ -94,7 +93,7 @@ class SongComponents extends React.Component {
         console.log(this);
 
         this.setState({loading: true})
-        fetch(`http://localhost:3000/convert/${this.props.tokens.access_token}`,{
+        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/${this.props.tokens.access_token}`,{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -112,8 +111,9 @@ class SongComponents extends React.Component {
     render() {
         const viewButton = this.state.viewButton;
         const list = this.props.item;
+        
         // checks if img of chosen size exist // 2nd part checks for bigger img if first not found
-        let imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
+        let imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "https://picsum.photos/300/?blur";
 
         if(this.state.loading) {
             return ( <Loading /> );

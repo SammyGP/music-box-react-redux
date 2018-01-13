@@ -84,6 +84,10 @@ var _Auth = __webpack_require__(3);
 
 var _Auth2 = _interopRequireDefault(_Auth);
 
+var _Tutorial = __webpack_require__(4);
+
+var _Tutorial2 = _interopRequireDefault(_Tutorial);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -121,7 +125,7 @@ var Nav = function (_React$Component) {
                     React.createElement(
                         "a",
                         { href: "/" },
-                        "Music Box"
+                        "Song Box"
                     )
                 ),
                 React.createElement(
@@ -187,7 +191,7 @@ var Layout = function (_React$Component2) {
 
             console.log(this.state);
             if (!this.state.playlists && this.state.tokens) {
-                fetch("http://localhost:3000/user/playlist/" + this.state.tokens.access_token).then(function (response) {
+                fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/" + this.state.tokens.access_token).then(function (response) {
                     return response.json();
                 }).then(function (data) {
                     _this3.setState({ playlists: data.items });
@@ -250,11 +254,7 @@ var Layout = function (_React$Component2) {
                     null,
                     React.createElement(Nav, { view: "auth", colorSchema: "#ffffff" }),
                     React.createElement(_Auth2.default, { setTokens: this.handleAuth }),
-                    React.createElement(
-                        "h1",
-                        null,
-                        "Loading"
-                    )
+                    React.createElement(_Tutorial2.default, null)
                 );
             }
         }
@@ -313,8 +313,32 @@ var Loading = function (_React$Component) {
     return Loading;
 }(React.Component);
 
-var TrackItem = function (_React$Component2) {
-    _inherits(TrackItem, _React$Component2);
+var Placeholder = function (_React$Component2) {
+    _inherits(Placeholder, _React$Component2);
+
+    function Placeholder() {
+        _classCallCheck(this, Placeholder);
+
+        return _possibleConstructorReturn(this, (Placeholder.__proto__ || Object.getPrototypeOf(Placeholder)).apply(this, arguments));
+    }
+
+    _createClass(Placeholder, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement("path", {
+                    d: "M30 0h2v23c0 2.761-3.134 5-7 5s-7-2.239-7-5c0-2.761 3.134-5 7-5 1.959 0 3.729 0.575 5 1.501v-11.501l-16 3.556v15.444c0 2.761-3.134 5-7 5s-7-2.239-7-5c0-2.761 3.134-5 7-5 1.959 0 3.729 0.575 5 1.501v-19.501l18-4z" })
+            );
+        }
+    }]);
+
+    return Placeholder;
+}(React.Component);
+
+var TrackItem = function (_React$Component3) {
+    _inherits(TrackItem, _React$Component3);
 
     function TrackItem() {
         _classCallCheck(this, TrackItem);
@@ -348,35 +372,35 @@ var TrackItem = function (_React$Component2) {
     return TrackItem;
 }(React.Component);
 
-var Tracklist = function (_React$Component3) {
-    _inherits(Tracklist, _React$Component3);
+var Tracklist = function (_React$Component4) {
+    _inherits(Tracklist, _React$Component4);
 
     function Tracklist(props) {
         _classCallCheck(this, Tracklist);
 
-        var _this3 = _possibleConstructorReturn(this, (Tracklist.__proto__ || Object.getPrototypeOf(Tracklist)).call(this, props));
+        var _this4 = _possibleConstructorReturn(this, (Tracklist.__proto__ || Object.getPrototypeOf(Tracklist)).call(this, props));
 
-        _this3.state = {
+        _this4.state = {
             tracks: [],
             loading: false
         };
 
-        _this3.componentWillMount = _this3.componentWillMount.bind(_this3);
-        return _this3;
+        _this4.componentWillMount = _this4.componentWillMount.bind(_this4);
+        return _this4;
     }
 
     _createClass(Tracklist, [{
         key: "componentWillMount",
         value: function componentWillMount() {
-            var _this4 = this;
+            var _this5 = this;
 
             console.log(this);
             this.setState({ loading: true });
-            fetch("http://localhost:3000/playlist/" + this.props.user + "/" + this.props.id + "/" + this.props.tokens.access_token).then(function (response) {
+            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/" + this.props.user + "/" + this.props.id + "/" + this.props.tokens.access_token).then(function (response) {
                 return response.json();
             }).then(function (data) {
-                _this4.setState({ loading: false });
-                return _this4.setState({ tracks: data.tracks.items });
+                _this5.setState({ loading: false });
+                return _this5.setState({ tracks: data.tracks.items });
             });
         }
     }, {
@@ -403,23 +427,23 @@ var Tracklist = function (_React$Component3) {
     return Tracklist;
 }(React.Component);
 
-var SongComponents = function (_React$Component4) {
-    _inherits(SongComponents, _React$Component4);
+var SongComponents = function (_React$Component5) {
+    _inherits(SongComponents, _React$Component5);
 
     function SongComponents(props) {
         _classCallCheck(this, SongComponents);
 
-        var _this5 = _possibleConstructorReturn(this, (SongComponents.__proto__ || Object.getPrototypeOf(SongComponents)).call(this, props));
+        var _this6 = _possibleConstructorReturn(this, (SongComponents.__proto__ || Object.getPrototypeOf(SongComponents)).call(this, props));
 
-        _this5.state = {
+        _this6.state = {
             viewButton: false,
             submitButton: false,
             loading: false
         };
 
-        _this5.handleClickView = _this5.handleClickView.bind(_this5);
-        _this5.handleSubmit = _this5.handleSubmit.bind(_this5);
-        return _this5;
+        _this6.handleClickView = _this6.handleClickView.bind(_this6);
+        _this6.handleSubmit = _this6.handleSubmit.bind(_this6);
+        return _this6;
     }
 
     _createClass(SongComponents, [{
@@ -435,13 +459,13 @@ var SongComponents = function (_React$Component4) {
     }, {
         key: "handleSubmit",
         value: function handleSubmit(e) {
-            var _this6 = this;
+            var _this7 = this;
 
             console.log("submit button clicked");
             console.log(this);
 
             this.setState({ loading: true });
-            fetch("http://localhost:3000/convert/" + this.props.tokens.access_token, {
+            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/" + this.props.tokens.access_token, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -452,8 +476,8 @@ var SongComponents = function (_React$Component4) {
                 return response.json();
             }).then(function (response) {
                 console.log(response);
-                _this6.setState({ loading: false });
-                return _this6.props.onListSubmit(response);
+                _this7.setState({ loading: false });
+                return _this7.props.onListSubmit(response);
             });
         }
     }, {
@@ -461,8 +485,9 @@ var SongComponents = function (_React$Component4) {
         value: function render() {
             var viewButton = this.state.viewButton;
             var list = this.props.item;
+
             // checks if img of chosen size exist // 2nd part checks for bigger img if first not found
-            var imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "";
+            var imgItem = list.images[1] ? list.images[1].url : list.images[0] ? list.images[0].url : "https://picsum.photos/300/?blur";
 
             if (this.state.loading) {
                 return React.createElement(Loading, null);
@@ -849,7 +874,7 @@ var VideoComponent = function (_React$Component5) {
             if (item.items[0]) {
                 return _this8.state.videoIds.push(item.items[0].id.videoId);
             } else {
-                return _this8.state.videoIds.push(null);
+                // return this.state.videoIds.push(null)
             }
         });
         _this8.handleShowSecondary = _this8.handleShowSecondary.bind(_this8);
@@ -868,9 +893,7 @@ var VideoComponent = function (_React$Component5) {
         key: "handleSubmit",
         value: function handleSubmit() {
             this.setState({ videoPlaybackButton: true });
-            //this.setState({videoIds: ["lbHYyPdQfqk", "lbHYyPdQfqk", "lbHYyPdQfqk" ,"lbHYyPdQfqk"]})
             console.log("Submitted");
-            console.log(this);
         }
     }, {
         key: "handleSongChange",
@@ -958,7 +981,7 @@ var Auth = function (_React$Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
-            fetch("http://localhost:3000/auth", {
+            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/auth", {
                 headers: {
                     "Accept": "application/json"
                 }
@@ -974,7 +997,7 @@ var Auth = function (_React$Component) {
             var _this3 = this;
 
             if (!this.props.token) {
-                fetch("http://localhost:3000/api/tokens").then(function (response) {
+                fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/api/tokens").then(function (response) {
                     return response.json();
                 }).then(function (data) {
                     return _this3.props.setTokens(data);
@@ -1004,6 +1027,170 @@ var Auth = function (_React$Component) {
 }(React.Component);
 
 exports.default = Auth;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Step1 = function (_React$Component) {
+    _inherits(Step1, _React$Component);
+
+    function Step1() {
+        _classCallCheck(this, Step1);
+
+        return _possibleConstructorReturn(this, (Step1.__proto__ || Object.getPrototypeOf(Step1)).apply(this, arguments));
+    }
+
+    _createClass(Step1, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "p",
+                    null,
+                    "Give us permission from Spotify to view your playlists"
+                )
+            );
+        }
+    }]);
+
+    return Step1;
+}(React.Component);
+
+var Step2 = function (_React$Component2) {
+    _inherits(Step2, _React$Component2);
+
+    function Step2() {
+        _classCallCheck(this, Step2);
+
+        return _possibleConstructorReturn(this, (Step2.__proto__ || Object.getPrototypeOf(Step2)).apply(this, arguments));
+    }
+
+    _createClass(Step2, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "p",
+                    null,
+                    "Look over your playlists and choose which one you'd like to see videos off and submit it"
+                )
+            );
+        }
+    }]);
+
+    return Step2;
+}(React.Component);
+
+var Step3 = function (_React$Component3) {
+    _inherits(Step3, _React$Component3);
+
+    function Step3() {
+        _classCallCheck(this, Step3);
+
+        return _possibleConstructorReturn(this, (Step3.__proto__ || Object.getPrototypeOf(Step3)).apply(this, arguments));
+    }
+
+    _createClass(Step3, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "p",
+                    null,
+                    "Look over the results and decide if the videos display fit your choises"
+                )
+            );
+        }
+    }]);
+
+    return Step3;
+}(React.Component);
+
+var Step4 = function (_React$Component4) {
+    _inherits(Step4, _React$Component4);
+
+    function Step4() {
+        _classCallCheck(this, Step4);
+
+        return _possibleConstructorReturn(this, (Step4.__proto__ || Object.getPrototypeOf(Step4)).apply(this, arguments));
+    }
+
+    _createClass(Step4, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "p",
+                    null,
+                    "Enjoy your brand new Youtube playlist"
+                )
+            );
+        }
+    }]);
+
+    return Step4;
+}(React.Component);
+
+var HowItWorks = function (_React$Component5) {
+    _inherits(HowItWorks, _React$Component5);
+
+    function HowItWorks() {
+        _classCallCheck(this, HowItWorks);
+
+        return _possibleConstructorReturn(this, (HowItWorks.__proto__ || Object.getPrototypeOf(HowItWorks)).apply(this, arguments));
+    }
+
+    _createClass(HowItWorks, [{
+        key: "render",
+        value: function render() {
+            return React.createElement(
+                "div",
+                null,
+                React.createElement(
+                    "h1",
+                    null,
+                    "How it Works"
+                ),
+                React.createElement(
+                    "div",
+                    { style: { marginLeft: "10%" } },
+                    React.createElement(Step1, null),
+                    React.createElement(Step2, null),
+                    React.createElement(Step3, null),
+                    React.createElement(Step4, null)
+                )
+            );
+        }
+    }]);
+
+    return HowItWorks;
+}(React.Component);
+
+exports.default = HowItWorks;
 
 /***/ })
 /******/ ]);

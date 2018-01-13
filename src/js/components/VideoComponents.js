@@ -159,39 +159,38 @@ class TestYT extends React.Component {
     }
     componentDidMount () {
         if (!loadYT) {
-          loadYT = new Promise((resolve) => {
-            const tag = document.createElement('script')
-            tag.src = 'https://www.youtube.com/iframe_api'
-            const firstScriptTag = document.getElementsByTagName('script')[0]
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
-            window.onYouTubeIframeAPIReady = () => resolve(window.YT)
-          })
+            loadYT = new Promise((resolve) => {
+                const tag = document.createElement('script')
+                tag.src = 'https://www.youtube.com/iframe_api'
+                const firstScriptTag = document.getElementsByTagName('script')[0]
+                firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+                window.onYouTubeIframeAPIReady = () => resolve(window.YT)
+            })
         }
         loadYT.then((YT) => {
-          this.player = new YT.Player(this.youtubePlayerAnchor, {
+            this.player = new YT.Player(this.youtubePlayerAnchor, {
             height: 390,
             width: 640,
             videoId: this.state.playlist[0],
-            events: {
-              onReady: this.onPlayerStateChange
-            }
-          })
+                events: {
+                    onReady: this.onPlayerStateChange
+                }
+            })
         })
       }
     
-        onPlayerStateChange(e) {
-            this.player.loadPlaylist({playlist: this.state.playlist});
- 
-        }
+    onPlayerStateChange(e) {
+        this.player.loadPlaylist({playlist: this.state.playlist});
+    }
     
-      render () {
+    render () {
         console.log(this);
         return (
-          <section className='youtubeComponent-wrapper'>
+            <section className='youtubeComponent-wrapper'>
             <div ref={(r) => { this.youtubePlayerAnchor = r }}></div>
-          </section>
-        )
-      }
+            </section>
+        );
+    }
 }
 
 class VideoComponent extends React.Component {
@@ -209,7 +208,7 @@ class VideoComponent extends React.Component {
             if(item.items[0]) {
                 return this.state.videoIds.push(item.items[0].id.videoId) 
             } else {
-                return this.state.videoIds.push(null)
+               // return this.state.videoIds.push(null)
             }
         })
         this.handleShowSecondary = this.handleShowSecondary.bind(this);
@@ -224,9 +223,7 @@ class VideoComponent extends React.Component {
 
     handleSubmit() {
         this.setState({videoPlaybackButton: true});
-        //this.setState({videoIds: ["lbHYyPdQfqk", "lbHYyPdQfqk", "lbHYyPdQfqk" ,"lbHYyPdQfqk"]})
         console.log("Submitted")
-        console.log(this);
     }
 
     handleSongChange(e) {
