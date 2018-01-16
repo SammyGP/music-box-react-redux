@@ -38,7 +38,7 @@ class Tracklist extends React.Component {
 
     componentWillMount() {
         this.setState({loading: true})
-        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/${this.props.user}/${this.props.id}/${this.props.tokens.access_token}`)
+        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/${this.props.user}/${this.props.id}/${localStorage.getItem("token")}`)
         .then((response) => { return response.json() })
         .then((data) => { 
             this.setState({loading: false})
@@ -93,7 +93,7 @@ class SongComponents extends React.Component {
         console.log(this);
 
         this.setState({loading: true})
-        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/${this.props.tokens.access_token}`,{
+        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/${localStorage.getItem("token")}`,{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -124,7 +124,7 @@ class SongComponents extends React.Component {
                 <div className="songList" >
                     <button onClick={this.handleClickView} >View</button>
                     <button onClick={this.handleSubmit} >Submit</button>
-                    <Tracklist id={list.id} user={list.owner.id} tokens={this.props.tokens} />
+                    <Tracklist id={list.id} user={list.owner.id} tokens={localStorage.getItem("token")} />
                 </div>
             );
         } else {

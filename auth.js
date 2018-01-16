@@ -8,10 +8,8 @@ var qs = require("querystring");
 var request = require("request");
 //app.set("view engine", "ejs");
 //app.use(express.static("public"));
-var tokens = {
-	access_token: false,
-	refresh_token: false
-};
+
+const tokens = "";
 
 router.get("/auth", function(req, res){
 	var authUrl = qs.stringify({
@@ -52,19 +50,19 @@ router.get("/callback", function(req, res){
 			console.log("error loading page");
 			console.log(err)
 		} else {
-			tokens.access_token = body.access_token;
-			tokens.refresh_token = body.refresh_token;
+			let access_token = body.access_token;
+			let refresh_token = body.refresh_token;
 			
 			console.log("auth done")
-			//res.json({auth: "yes", token: tokens})
+			//res.json({auth: "yes"})
 
-			res.redirect("/");
+			res.redirect("/#" + body.access_token);
 		}
 	});
 })
 
 router.get("/api/tokens", function(req, res){
-	if(tokens.access_token) {
+	if(tokens) {
 		res.json({tokens});
 	} else {
 		res.json({tokens: false})

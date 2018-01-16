@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node app.js",
     "webpack": "webpack --watch",
-    "sass": "sass --watch public/style/main.scss:public/style/main.css"
+    "sass": "sass --watch public/style/main.scss:public/style/main.css",
+    "zip": "zip ../music-box-vx.x.x.zip -r * .[^.]*"
   },
   "author": "",
   "license": "ISC",

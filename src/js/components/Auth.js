@@ -1,4 +1,6 @@
 
+const URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com"
+
 class Auth extends React.Component {
     constructor(props) {
         super(props);
@@ -19,10 +21,15 @@ class Auth extends React.Component {
                 return this.setState({redirectUrl: data.url}) })
     }
     componentDidMount() {
-        if(!this.props.token) {
+        const token = localStorage.getItem("token");
+        if(!this.props.token || !token) {
             fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/api/tokens")
                 .then((response) => { return response.json() })
-                .then((data) => { return this.props.setTokens(data) })
+                .then(() => { 
+                    let data = window.location.hash.substring(1);
+                    localStorage.setItem("token", data);
+                    return this.props.setTokens(data) 
+                })
         }
     }
 

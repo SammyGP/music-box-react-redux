@@ -50,7 +50,7 @@ class Layout extends React.Component {
     componentDidUpdate() {
         console.log(this.state)
         if(!this.state.playlists && this.state.tokens) {
-            fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/${this.state.tokens.access_token}`)
+            fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/${localStorage.getItem("token")}`)
             .then((response) => { return response.json() })
             .then((data) => { 
                 this.setState({playlists: data.items})
@@ -62,13 +62,14 @@ class Layout extends React.Component {
         this.setState({youtubeData: e})
     }
     handleAuth(e) {
-        this.setState({tokens: e.tokens});
+        console.log(e);
+        this.setState({tokens: e});
     }
 
     render() {
 
         console.log("state change")
-
+        console.log(this);
         if(this.state.playlists && !this.state.youtubeData) {
 
             let cells = [];
@@ -96,7 +97,7 @@ class Layout extends React.Component {
             return (
                 <div>
                     <Nav view="video" colorSchema="#cc181e"/>
-                    <VideoComponents list={this.state.youtubeData} />
+                    {<VideoComponents list={this.state.youtubeData} />}
                 </div>
             );
         } else {
