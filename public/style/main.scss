@@ -88,6 +88,18 @@ nav {
 
 // LIST STYLE
 
+#songBox-wrapper {
+	display:grid;
+	grid-template-columns: 25% 25% 25% 25%;
+	@media screen and (max-width: 1023px) {
+		grid-template-columns: 50% 50%;
+	}
+	@media screen and (max-width: 812px) {
+		width:100%;
+		grid-template-columns: 100%;
+	}
+}
+
 .songBox {
 	position:relative;
 	width:100%;

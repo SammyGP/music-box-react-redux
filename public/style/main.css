@@ -50,6 +50,17 @@ nav {
     color: #ffffff;
     margin-right: 5%; }
 
+#songBox-wrapper {
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%; }
+  @media screen and (max-width: 1023px) {
+    #songBox-wrapper {
+      grid-template-columns: 50% 50%; } }
+  @media screen and (max-width: 812px) {
+    #songBox-wrapper {
+      width: 100%;
+      grid-template-columns: 100%; } }
+
 .songBox {
   position: relative;
   width: 100%;

@@ -1,5 +1,6 @@
 
-const URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com"
+const URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com";
+const localURL = "http://localhost:3000";
 
 class Auth extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class Auth extends React.Component {
     }
     
     componentWillMount() {
-        fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/auth",{
+        fetch(localURL + "/auth",{
             headers: {
                 "Accept": "application/json"
                 }
@@ -23,7 +24,7 @@ class Auth extends React.Component {
     componentDidMount() {
         const token = localStorage.getItem("token");
         if(!this.props.token || !token) {
-            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/api/tokens")
+            fetch(localURL + "/api/tokens")
                 .then((response) => { return response.json() })
                 .then(() => { 
                     let data = window.location.hash.substring(1);

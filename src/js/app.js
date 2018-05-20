@@ -39,7 +39,8 @@ class Layout extends React.Component {
         this.state = {
             playlists: "",
             youtubeData: "",
-            tokens: ""
+            tokens: "",
+            error: null
         };
 
         //this.componentWillMount = this.componentWillMount.bind(this);
@@ -50,10 +51,13 @@ class Layout extends React.Component {
     componentDidUpdate() {
         console.log(this.state)
         if(!this.state.playlists && this.state.tokens) {
-            fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/${localStorage.getItem("token")}`)
+            fetch(`http://localhost:3000/user/playlist/${localStorage.getItem("token")}` /*`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/${localStorage.getItem("token")}`*/)
             .then((response) => { return response.json() })
             .then((data) => { 
                 this.setState({playlists: data.items})
+            })
+            .catch((error) => {
+                this.setState({error});
             })
         }  
     }
@@ -67,7 +71,6 @@ class Layout extends React.Component {
     }
 
     render() {
-
         console.log("state change")
         console.log(this);
         if(this.state.playlists && !this.state.youtubeData) {
@@ -88,7 +91,7 @@ class Layout extends React.Component {
             return(
                 <div>
                     <Nav view="song" colorSchema="#2eb039" />
-                    <div style={{display: "grid", gridTemplateColumns: "25% 25% 25% 25%"}} >
+                    <div id="songBox-wrapper">
                         {cells}
                     </div>
                 </div>

@@ -175,7 +175,8 @@ var Layout = function (_React$Component2) {
         _this2.state = {
             playlists: "",
             youtubeData: "",
-            tokens: ""
+            tokens: "",
+            error: null
         };
 
         //this.componentWillMount = this.componentWillMount.bind(this);
@@ -191,10 +192,12 @@ var Layout = function (_React$Component2) {
 
             console.log(this.state);
             if (!this.state.playlists && this.state.tokens) {
-                fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/" + localStorage.getItem("token")).then(function (response) {
+                fetch("http://localhost:3000/user/playlist/" + localStorage.getItem("token") /*`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/user/playlist/${localStorage.getItem("token")}`*/).then(function (response) {
                     return response.json();
                 }).then(function (data) {
                     _this3.setState({ playlists: data.items });
+                }).catch(function (error) {
+                    _this3.setState({ error: error });
                 });
             }
         }
@@ -235,7 +238,7 @@ var Layout = function (_React$Component2) {
                     React.createElement(Nav, { view: "song", colorSchema: "#2eb039" }),
                     React.createElement(
                         "div",
-                        { style: { display: "grid", gridTemplateColumns: "25% 25% 25% 25%" } },
+                        { id: "songBox-wrapper" },
                         cells
                     )
                 );
@@ -285,6 +288,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 //import "./SongComponents.css";
+
+var URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com";
+var localURL = "http://localhost:3000";
 
 var Loading = function (_React$Component) {
     _inherits(Loading, _React$Component);
@@ -371,7 +377,7 @@ var Tracklist = function (_React$Component3) {
             var _this4 = this;
 
             this.setState({ loading: true });
-            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/" + this.props.user + "/" + this.props.id + "/" + localStorage.getItem("token")).then(function (response) {
+            fetch(localURL + "/playlist/" + this.props.user + "/" + this.props.id + "/" + localStorage.getItem("token")).then(function (response) {
                 return response.json();
             }).then(function (data) {
                 _this4.setState({ loading: false });
@@ -440,7 +446,7 @@ var SongComponents = function (_React$Component4) {
             console.log(this);
 
             this.setState({ loading: true });
-            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/" + localStorage.getItem("token"), {
+            fetch(localURL + "/convert/" + localStorage.getItem("token"), {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
@@ -938,6 +944,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com";
+var localURL = "http://localhost:3000";
 
 var Auth = function (_React$Component) {
     _inherits(Auth, _React$Component);
@@ -958,7 +965,7 @@ var Auth = function (_React$Component) {
         value: function componentWillMount() {
             var _this2 = this;
 
-            fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/auth", {
+            fetch(localURL + "/auth", {
                 headers: {
                     "Accept": "application/json"
                 }
@@ -973,8 +980,9 @@ var Auth = function (_React$Component) {
         value: function componentDidMount() {
             var _this3 = this;
 
-            if (!this.props.token) {
-                fetch("http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/api/tokens").then(function (response) {
+            var token = localStorage.getItem("token");
+            if (!this.props.token || !token) {
+                fetch(localURL + "/api/tokens").then(function (response) {
                     return response.json();
                 }).then(function () {
                     var data = window.location.hash.substring(1);

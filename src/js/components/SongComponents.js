@@ -1,5 +1,8 @@
 //import "./SongComponents.css";
 
+const URL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com";
+const localURL = "http://localhost:3000";
+
 class Loading extends React.Component {
     render() {
         return(
@@ -38,7 +41,7 @@ class Tracklist extends React.Component {
 
     componentWillMount() {
         this.setState({loading: true})
-        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/playlist/${this.props.user}/${this.props.id}/${localStorage.getItem("token")}`)
+        fetch(`${localURL}/playlist/${this.props.user}/${this.props.id}/${localStorage.getItem("token")}`)
         .then((response) => { return response.json() })
         .then((data) => { 
             this.setState({loading: false})
@@ -93,7 +96,7 @@ class SongComponents extends React.Component {
         console.log(this);
 
         this.setState({loading: true})
-        fetch(`http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/convert/${localStorage.getItem("token")}`,{
+        fetch(`${localURL}/convert/${localStorage.getItem("token")}`,{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

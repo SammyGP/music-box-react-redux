@@ -10,13 +10,14 @@ var request = require("request");
 //app.use(express.static("public"));
 
 const tokens = "";
+const callbackURL = "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/callback";
 
 router.get("/auth", function(req, res){
 	var authUrl = qs.stringify({
 		client_id: client_id,
 		response_type: "code",
 		scope: "playlist-read-private",
-		redirect_uri: "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/callback",
+		redirect_uri: "http://localhost:3000/callback",
 		show_dialog: true
 	})
 	console.log("works?")
@@ -35,7 +36,7 @@ router.get("/callback", function(req, res){
 		form: {
 			grant_type: "authorization_code",
 			code: req.query.code,
-			redirect_uri: "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/callback"
+			redirect_uri: "http://localhost:3000/callback"
 		},
 		headers: {
 			"Access-Control-Allow-Origin": "*",
