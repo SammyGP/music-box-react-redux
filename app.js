@@ -11,6 +11,7 @@ cors			= require("cors");
 // not vialbe for release to have tokens like this
 // look inte pushing token to front end?
 
+/******************************/
 // no longer needed since i handle the tokens in the front end
 //tokens			= auth.tokens;
 
@@ -28,7 +29,6 @@ app.get("/", function(req, res){
 
 // gets all the tracks from the selected playlist and sends them to the frontend with a fetch request
 app.get("/playlist/:user/:id/:token", function(req, res){
-	console.log("get track route");
 	var userTracks = {
 		url: `https://api.spotify.com/v1/users/${req.params.user}/playlists/${req.params.id}`,
 		headers: {
@@ -123,7 +123,7 @@ app.post("/convert/:token", function(req, res){
 				.catch((error) => { 
 					counter++;
 					console.log("Following track not added: " + track);
-					return console.log("track is this long: " + `${track}`) 
+					return console.log(error); 
 				})
 			})
 	})
