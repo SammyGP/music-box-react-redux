@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node app.js",
+    "server": "node ./server/app.js",
     "webpack": "webpack --watch",
     "sass": "sass --watch public/style/main.scss:public/style/main.css",
     "zip": "zip ../music-box-vx.x.x.zip -r * .[^.]*"
@@ -13,23 +13,28 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.18.3",
     "cookie-session": "^2.0.0-beta.3",
-    "cors": "^2.8.4",
-    "ejs": "^2.5.7",
-    "express": "^4.16.2",
+    "cors": "^2.8.5",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
     "querystring": "^0.2.0",
-    "request": "^2.83.0",
-    "request-promise": "^4.2.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
     "style-loader": "^0.19.1",
-    "webpack": "^3.10.0"
+    "webpack": "^3.12.0"
   },
   "proxy": "http://songbox-env.pp2ggfzqvp.eu-central-1.elasticbeanstalk.com/",
   "devDependencies": {
-    "css-loader": "^0.28.8"
+    "css-loader": "^0.28.11"
   }
 }
