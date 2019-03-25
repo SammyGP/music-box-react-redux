@@ -1,0 +1,25 @@
+
+@import "../App.scss"; 
+@import "../palette.scss";
+
+
+nav {
+	margin-bottom:30px;
+	border:1px solid black;
+	box-shadow:$BoxShadow;
+	height:75px;
+	background-color:$TextDark;
+	* {
+		display:inline-block;
+	}
+	h1 {
+		margin:0;
+		font-size:3em;
+		color:$TextLight;
+	}
+	div {
+		float:right;
+		color:$TextLight;
+		margin-right:5%;
+	}
+}

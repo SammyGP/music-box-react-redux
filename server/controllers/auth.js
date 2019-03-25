@@ -17,7 +17,7 @@ router.get("/auth", function(req, res){
 		client_id: client_id,
 		response_type: "code",
 		scope,
-		redirect_uri: "http://localhost:3000/callback",
+		redirect_uri: "http://localhost:8080/callback",
 		show_dialog: true /* makes the user need to approve of the app everytime set to false on build */
 	})
 	res.send({url: "https://accounts.spotify.com/authorize?" + authUrl})
@@ -34,7 +34,7 @@ router.get("/callback", function(req, res){
 		form: {
 			grant_type: "authorization_code",
 			code: req.query.code,
-			redirect_uri: "http://localhost:3000/callback"
+			redirect_uri: "http://localhost:8080/callback"
 		},
 		headers: {
 			"Access-Control-Allow-Origin": "*",
@@ -55,8 +55,7 @@ router.get("/callback", function(req, res){
 			console.log("auth done")
 
 			//res.json({auth: "yes"})
-			//res.send({auth: body})
-			res.redirect("/?#" + body.access_token + "&refresh=" + body.refresh_token + "&expire=" + body.expires_in);
+			res.redirect("http://localhost:3000/?#&access=" + body.access_token + "&refresh=" + body.refresh_token + "&expire=" + body.expires_in);
 		}
 	});
 })

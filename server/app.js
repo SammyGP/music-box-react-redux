@@ -5,8 +5,6 @@ app 		   	= express(),
 request			= require("request"),
 auth 			= require("./controllers/auth"),
 authRouter		= auth.router,
-rp 				= require("request-promise"),
-cookieSession	= require("cookie-session"),
 cors			= require("cors");
 // not vialbe for release to have tokens like this
 // look inte pushing token to front end?
@@ -19,15 +17,13 @@ const songRouter = require("./controllers/song-controller");
 
 
 
-app.set("view engine", "ejs");
+//app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get("/", function(req, res){
-	res.render("index");
-});
+
 
 // gets all the tracks from the selected playlist and sends them to the frontend with a fetch request
 app.get("/playlist/:user/:id/:token", function(req, res){
@@ -75,7 +71,7 @@ app.post("/convert/:token", function(req, res){
 	/*****  *******/
 	// TEST
 
-	rp({
+	fetch({
 		url: req.body.playlist_url, 
 		headers: {
 		"Authorization": "Bearer " + req.params.token,
@@ -94,7 +90,7 @@ app.post("/convert/:token", function(req, res){
 		let data = [];
 		let counter = 0;
 			response.map((track) => {
-				rp({
+				fetch({
 					url:`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${track}`,
 					headers: {
 						"Accept": "application/json"
@@ -130,7 +126,7 @@ app.post("/convert/:token", function(req, res){
 
 // search youtube for query endpoint
 app.get("/convert/:id", function(req, res){
-	rp(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${req.params.id}`)
+	fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&key=${KEYS.YOUTUBE_KEY}&q=${req.params.id}`)
 	.then(function(response){
 		console.log("someone requested" + req.params.id);
 		res.json(response);
@@ -172,7 +168,7 @@ app.get("/auth/tokens/:refresh_token", authRouter);
 app.get("/callback", authRouter);
 app.get("/api/tokens", authRouter);
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 8080;
 
 app.listen(port, function(){
 	console.log("Server is up");

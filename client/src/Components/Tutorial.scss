@@ -1,0 +1,32 @@
+@import "../palette.scss";
+
+.tutorial button {
+  margin-top:10rem;
+  height:10rem;
+  width:14rem;
+  font-size: 1.5em;
+  background-color:$cyberPurple;
+  animation: irradic 3s infinite;
+  outline: 3px solid $cyberPink;
+}
+.tutorial button:hover {
+  outline: none;
+  animation: none;
+}
+@keyframes irradic {
+  0% {
+    opacity:0.8;
+  }
+  25% {
+    opacity:0.5;
+  }
+  50% {
+    opacity:1;
+  }
+  75% {
+    opacity:0.5;
+  }
+  100% {
+    opacity:1;
+  }
+}

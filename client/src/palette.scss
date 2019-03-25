@@ -1,0 +1,61 @@
+@font-face {
+  font-family: "alien-encounter";
+  src: local("alien-encounter"), 
+  url("~/fonts/TrueType/SFAlienEncounters.ttf") format("truetype");
+}
+@font-face {
+  font-family: "vaporwave-cursive";
+  src: local("vaporwave-cursive"), 
+  url("~/fonts/TrueType/Streamster.ttf") format("truetype");
+}
+@font-face {
+  font-family: "VHS";
+  src: local("VHS"), 
+  url("~/fonts/TrueType/VCR_OSD_MONO_1.001.ttf") format("truetype");
+}
+/* 
+*
+* cyberpunk Palette
+*
+*/
+$cyberDarkBlue: rgba(40, 11, 92, 1);
+$cyberBlue: #6230C5;
+$cyberDarkPurple: rgba(99, 36, 134, 1);
+$cyberPurple: rgba(104, 37, 166, 1);
+$cyberPink: rgba(196, 14, 243, 1);
+$cyberPinkAlt:#ED5EF6;
+$cyberTeal: rgba(21, 239, 244, 1);
+$cyberDarkTeal: #33B9DA;
+
+/*
+*
+* cyberpunk Palette 2
+*
+*/
+$cyberColorAlt1: rgba(66, 27, 90, 1);
+$cyberColorAlt2: rgba(81, 26, 116, 1);
+$cyberColorAlt3: rgba(104, 37, 166, 1);
+$cyberColorAlt4: rgba(196, 14, 243, 1);
+$cyberColorAlt5: rgba(162, 189, 191, 1);
+
+/*
+*
+* vaporwave Palette 1
+*
+*/
+$vaporColor1: rgba(199, 116, 232, 1);
+$vaporColor2: rgba(135, 149, 232, 1);
+$vaporColor3: rgba(173, 140, 255, 1);
+$vaporColor4: rgba(255, 106, 213, 1);
+$vaporColor5: rgba(148, 208, 255, 1);
+
+/*
+*
+* vaporwave Palette 2
+*
+*/
+$vaporColorAlt1: rgba(24, 24, 90, 1);
+$vaporColorAlt2: rgba(83, 41, 137, 1);
+$vaporColorAlt3: rgba(94, 35, 214, 1);
+$vaporColorAlt4: rgba(21, 239, 244, 1);
+$vaporColorAlt5: rgba(225, 88, 242, 1);

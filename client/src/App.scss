@@ -1,0 +1,62 @@
+@import "./palette.scss";
+@import "./main.scss";
+
+
+$MainRed: #cc181e;
+$DarkRed: #930000;
+$LigthRed: #ff5747;
+
+$MainGreen: #6ae368;
+$DarkGreen: #2eb039;
+$LightGreen:#a0ff98;
+
+$MainColor: #756bd9;
+$SecondarySong: #2eb039;
+$SecondaryVideo: #cc181e;
+
+$TextLight: #ffffff;
+$TextDark: #000000;
+
+$HeadlineFont:'Source Sans Pro', sans-serif;
+$TextFont:'Slabo 13px', serif;
+
+$BoxShadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+$MainBackground: linear-gradient(to right bottom, #280b5c, #331064, #3e146c, #491974, #541e7c, #5d2385, #67278f, #712c98, #7b33a6, #8639b4, #9040c2, #9b47d0);
+$SecondaryMainBackground: linear-gradient(to top, #3f51b1 0%, #5a55ae 13%, #7b5fac 25%, #8f6aae 38%, #a86aa4 50%, #cc6b8e 62%, #f18271 75%, #f3a469 87%, #f7c978 100%);
+
+
+body {
+  text-align: center;
+  min-height:100vh;
+  background-image:$MainBackground;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
